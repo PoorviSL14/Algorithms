@@ -1,0 +1,45 @@
+from mpl_toolkits.mplot3d import Axes3D
+import matplotlib.pyplot as plt
+from time import clock
+import random
+N_value=[]
+T_value=[]
+C_value=[]
+weight=[]
+value=[]
+
+def knapsack(W,n): 
+    F=[[0 for c in range(W+1)]for r in range(n+1)]  
+    for i in range(n+1): 
+        for j in range(W+1): 
+            if i==0 or j==0: 
+                F[i][j] = 0
+            elif weight[i-1]<=j: 
+                F[i][j] = max(value[i-1]+F[i-1][j-weight[i-1]],F[i-1][j]) 
+            else: 
+                F[i][j] = F[i-1][j]   
+
+
+if __name__=="__main__":
+    for n in range(5,200):
+        for i in range(n):
+            v=random.randint(1,50)
+            value.append(v)
+            w=random.randint(1,100)
+            weight.append(w)
+        W=random.randint(1,300)
+        start=clock()
+        knapsack(W,n)
+        end=clock()
+        t=end-start
+        N_value.append(n)
+        T_value.append(t)
+        C_value.append(W)
+    plt.title("KNAPSACK")
+    plt.xlabel('N(no of items')
+    plt.ylabel('T(time in sec)')
+    plt.plot(N_value,T_value)
+    plt.show()
+    fig = plt.figure()
+    ax = plt.axes(projection='3d')
+    ax.plot3D(N_value,C_value,T_value)
