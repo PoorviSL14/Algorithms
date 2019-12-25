@@ -1,0 +1,63 @@
+import matplotlib.pyplot as plt
+from time import clock
+import random
+N_value=[]
+T_value=[]
+v=[]
+def minimum(d,n):
+    global v
+    mini=999
+    x=999
+    for i in range(n):
+        if v[i]==0 and d[i]<mini:
+            x=i
+            mini=d[i]
+    return x
+
+def dijkstras(c,n):
+    d=[]*n
+    s=0
+    v[s]=1
+    for i in range(n):
+        d.append(c[s][i])
+    for i in range(n):
+        u=minimum(d,n)
+        if(u==999):
+            break
+        v[u]=1
+        for j in range(n):
+            if(v[j]==0 and d[u]+c[u][j]<d[j]):
+                d[j]=d[u]+c[u][j]
+        print('Distance from ',s,' to ',u,' is ',d[u])
+              
+if __name__=="__main__":
+    for n in range(5,15):
+        v=[0]*n
+        e=random.randint(n-1,2*n)
+        c=[[0 for c in range(n)]for r in range(n)]
+        for i in range(n):
+            for j in range(n):
+                if i==j:
+                    c[i][j]=0
+                else:
+                    c[i][j]=999    
+        for k in range(0,e):
+            i=random.randint(0,n-1)
+            j=random.randint(0,n-1)
+            while c[i][j]!=999 or i==j:
+                    i=random.randint(0,n-1)
+                    j=random.randint(0,n-1)
+            c[i][j]=c[j][i]=random.randint(1,9)
+        print(c)
+
+        start=clock()
+        dijkstras(c,n)
+        end=clock()
+        t=end-start
+        N_value.append(n)
+        T_value.append(t)
+    plt.title('DIJKSTRAS')
+    plt.xlabel('N(no of vertices)')
+    plt.ylabel('T(time in sec)')
+    plt.plot(N_value,T_value)
+    plt.show()          
