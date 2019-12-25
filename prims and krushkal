@@ -1,0 +1,140 @@
+import matplotlib.pyplot as plt
+from time import clock
+import random
+
+P_N_value=[]
+P_T_value=[]
+K_N_value=[]
+K_T_value=[]
+P_C_value=[]
+K_C_value=[]
+
+def prims(c,n):
+    pc=0
+    ne=1
+    w=0
+    v=[]
+    v.append(0)
+    while(ne<n):
+        m=999
+        for i in v:
+            for j in range(0,n):
+                pc=pc+1
+                if j not in v:
+                    if c[i][j]<m:
+                        m=c[i][j]
+                        a=i
+                        b=j
+        if m==999:
+            break
+        v.append(b)
+        ne=ne+1
+        w=w+m
+        print(a,'-',b,' weight=',m)
+    P_C_value.append(pc)
+    if(ne==n):
+        print('Weight of tree =',w)
+    else:
+        print('Disconnected graph')
+    print()
+        
+def kruskals(c,n):
+    kc=0
+    ne=1
+    p=[]
+    w=0
+    for i in range(0,n):
+        p.append(i)
+    while(ne<n):
+        m=999
+        for i in range(0,n):
+            for j in range(i+1,n):
+                kc=kc+1
+                if c[i][j]<m:
+                    m=c[i][j]
+                    a=i
+                    b=j
+        if(m==999):
+            break
+        u=findparent(p,a)
+        v=findparent(p,b)
+        if(u!=v):
+            print(a,'-',b,' weight =',m)
+            w=w+m
+            p[b]=p[a]
+            ne=ne+1
+        c[a][b]=c[b][a]=999
+    K_C_value.append(kc)
+    if(ne==n):
+        print('weight of tree =',w)
+    else:
+        print('Disconnected graph')
+        
+def findparent(p,i):
+    j=i
+    while(p[j]!=j):
+        j=p[j]
+    return j
+   
+if __name__=="__main__":
+    for n in range(5,50):
+        e=random.randint(n-1,2*n)
+        c=[[0 for c in range(n)]for r in range(n)]
+        for i in range(n):
+            for j in range(n):
+                if i==j:
+                    c[i][j]=0
+                else:
+                    c[i][j]=999    
+        for k in range(0,e):
+            i=random.randint(0,n-1)
+            j=random.randint(0,n-1)
+            while(i==j or c[i][j]!=999):
+                    i=random.randint(0,n-1)
+                    j=random.randint(0,n-1)
+            c[i][j]=c[j][i]=random.randint(1,9)
+        print(c)
+        print()
+        
+        P_start=clock()
+        prims(c,n)
+        P_end=clock()
+        Pt=P_end-P_start
+        P_N_value.append(n)
+        P_T_value.append(Pt)
+        
+        K_start=clock()
+        kruskals(c,n)
+        K_end=clock()
+        Kt=K_end-K_start
+        K_N_value.append(n)
+        K_T_value.append(Kt)
+        
+    plt.title('PRIMS AND KRUSKAL')
+    plt.xlabel('N(no of vertices)')
+    plt.ylabel('T(time in sec)')
+    plt.plot(P_N_value,P_T_value,'r',label='PRIMS')          
+    plt.xlabel('N(no of vertices)')
+    plt.ylabel('T(time in sec)')
+    plt.plot(K_N_value,K_T_value,'b',label='KRUSKAL')
+    plt.legend(loc="upper left")
+    plt.show()          
+    
+    plt.title('PRIMS AND KRUSKAL')
+    plt.xlabel('N(no of vertices)')
+    plt.ylabel('C(count)')
+    plt.plot(P_N_value,P_C_value,'r',label='PRIMS')          
+    plt.xlabel('N(no of vertices)')
+    plt.ylabel('C(count)')
+    plt.plot(K_N_value,K_C_value,'b',label='KRUSKAL')
+    plt.legend(loc="upper left")
+    plt.show()          
+
+
+
+
+
+
+
+
+
