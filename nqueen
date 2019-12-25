@@ -1,0 +1,49 @@
+import matplotlib.pyplot as plt
+from time import clock
+N_value=[]
+T_value=[]
+def issafe(a,r,c):
+    for i in range(c):
+        if a[r][i]==1:
+            return False
+    for i,j in zip(range(r,-1,-1),range(c,-1,-1)):
+        if a[i][j]==1:
+            return False
+    for i,j in zip(range(r,n,1),range(c,-1,-1)):
+        if a[i][j]==1:
+            return False
+    return True
+def nqueen(a,c,n):
+    if c>=n:
+        return True
+    for i in range(n):
+        if (issafe(a,i,c)):
+            a[i][c]=1
+            if (nqueen(a,c+1,n)):
+                return True
+            a[i][c]=0
+      #print(a)
+    return False
+    
+if __name__=="__main__":
+    for n in range(15):
+         a=[[0 for c in range(n)]for r in range(n)]
+         start=clock()
+         res=nqueen(a,0,n)
+         end=clock()
+         t=end-start
+         T_value.append(t)
+         N_value.append(n)
+         if(res):
+             print("solution for ",n," is ")
+             for i in a:
+                 print(i)
+         else:
+             print('solution does not exist')
+         print()
+    plt.title("N QUEEN")
+    plt.xlabel("N")
+    plt.ylabel("Time")
+    plt.plot(N_value,T_value)
+    plt.show()         
+ 
