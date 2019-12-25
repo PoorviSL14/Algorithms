@@ -1,0 +1,112 @@
+import matplotlib.pyplot as plt
+import random
+from time import clock
+
+L_value=[]
+L_time=[]
+L_count=[]
+B_time=[]
+B_value=[]
+B_count=[]
+I_time=[]
+I_value=[]
+I_count=[]
+A=[]
+def linearsearch(n,x):
+    lcount=0
+    for i in range(n):
+        lcount=lcount+1
+        if(A[i]==x):
+            return lcount
+    return lcount
+            
+        
+def binarysearch(n,x):
+    bcount=0
+    low=0 
+    high=n-1
+    while low<=high:
+        bcount=bcount+1
+        mid=(low+high)//2 
+        if A[mid]==x: 
+            return bcount
+        elif A[mid]<x: 
+            low=mid+1
+        else: 
+            high=mid-1
+    return bcount
+    
+def interpolationsearch(n,x):
+    icount=0
+    low=0
+    high=n-1
+    while low<=high and x>A[low] and x<=A[high]:
+        icount=icount+1
+        pos=low+ int(((float(high-low)/(A[high]-A[low]))*(x-A[low])))
+        if A[pos]==x:
+            return icount
+        if A[pos]<x:
+            low=pos+1
+        else:
+            high=pos-1
+    return icount
+
+if __name__ == "__main__":
+    for n in range(10000,100000,10000):
+        for j in range(n):
+            A.append(random.randint(1,10000))
+        x=random.randint(1,10000)
+        A.sort()
+        
+        startl=clock()
+        l=linearsearch(n,x)
+        endl=clock()
+        ltime=endl-startl
+        #print("The list of size ",len(A)," was searched in time ",ltime)
+        L_count.append(l)
+        L_time.append(ltime)
+        L_value.append(n)
+        
+        startb=clock()
+        b=binarysearch(n,x)
+        endb=clock()
+        btime=endb-startb
+        #print("The list of size ",len(A)," was searched in time ",btime)
+        B_count.append(b)
+        B_time.append(btime)
+        B_value.append(n)
+        
+        starti=clock()
+        i=interpolationsearch(n,x)
+        endi=clock()
+        timei=endi-starti
+        #print("The list of size ",len(A)," was searched in time ",timei)
+        I_count.append(i)
+        I_time.append(timei)
+        I_value.append(n)
+    #n vs time    
+    plt.title("Searching Techniques")
+    plt.xlabel("n(in thousands)")
+    plt.ylabel("Time(in sec)")
+    plt.plot(L_value,L_time,'g',label="Linear Search")
+    plt.plot(B_value,B_time,'r',label="Binary Search")
+    plt.plot(I_value,I_time,'b--',label="Interpolation Search")
+    plt.grid()
+    plt.legend(loc="upper left")
+    plt.scatter(L_value,L_time)
+    plt.scatter(B_value,B_time)
+    plt.scatter(I_value,I_time)
+    plt.show()
+    #n vs count
+    plt.title("Searching Techniques")
+    plt.xlabel("n(in thousands)")
+    plt.ylabel("Count of basic operations")
+    plt.plot(L_value,L_count,'g',label="Linear Search")
+    plt.plot(B_value,B_count,'r',label="Binary Search")
+    plt.plot(I_value,I_count,'b--',label="Interpolation Search")
+    plt.grid()
+    plt.legend(loc="upper left")
+    plt.scatter(L_value,L_count)
+    plt.scatter(B_value,B_count)
+    plt.scatter(I_value,I_count)
+    plt.show()
