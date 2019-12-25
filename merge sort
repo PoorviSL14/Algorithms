@@ -1,0 +1,47 @@
+import matplotlib.pyplot as plt
+import random
+from time import clock
+sort_time=[]
+N_value=[]
+a=[]
+def mergesort(a):
+    if len(a)>1:
+        mid=len(a)//2
+        left=a[:mid]
+        right=a[mid:]
+        mergesort(left)
+        mergesort(right)
+        i=j=k=0
+        while i<len(left) and j<len(right):
+            if left[i]<right[j]:
+                a[k]=left[i]
+                i+=1
+            else:
+                a[k]=right[j]
+                j+=1
+            k+=1
+        while i < len(left):
+            a[k] = left[i]
+            i+=1
+            k+=1
+        while j<len(right):
+            a[k]=right[j]
+            j+=1
+            k+=1  
+    
+
+if __name__ == "__main__":
+    for N in range(1000,10000,1000):
+        for j in range(0,N):
+            a.append(random.randint(10,20000))
+        start=clock()
+        mergesort(a)
+        end = clock()
+        time1=end-start
+        N_value.append(N)
+        sort_time.append(time1)
+    plt.title('MERGE SORT')
+    plt.xlabel('N(in thousands)')
+    plt.ylabel('time(in sec)')
+    plt.plot(N_value,sort_time)
+    plt.show()
