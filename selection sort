@@ -1,0 +1,29 @@
+import matplotlib.pyplot as plt
+import random
+from time import clock
+T_value=[]
+N_value=[]
+a=[]
+
+def selection(n):
+    for i in range(0,n-2):
+        for j in range(1,n-1):
+            if a[i]>a[j]:
+                a[i],a[j]=a[j],a[i]
+                
+    
+if __name__ == "__main__":
+    for N in range(1000,10000,1000):
+        for j in range(0,N):
+            a.append(random.randint(10,20000))
+        start=clock()
+        selection(N)
+        end = clock()
+        t=end-start
+        N_value.append(N)
+        T_value.append(t)
+    plt.title('SELECTION SORT')
+    plt.xlabel('N(in thousands)')
+    plt.ylabel('time(in sec)')
+    plt.plot(N_value,T_value)
+    plt.show()
